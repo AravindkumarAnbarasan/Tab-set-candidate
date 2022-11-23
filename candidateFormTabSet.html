@@ -1,0 +1,126 @@
+<template>
+    <lightning-card title="Candidate Creation" icon-name="utility:groups">
+        <lightning-tabset variant="vertical" active-tab-value={activeTab}>
+
+            <lightning-tab label="Personal Details" value="1" onactive={handleActive}>
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item class="slds-p-around_xx-small" size=6>
+                        <lightning-input class="slds-size_1-of-2" label="Name" value={getCanDetails.Name} 
+                                        onchange={handleNameChange}></lightning-input><br/>
+                        <lightning-input class="slds-size_1-of-2" label="Phone" value={getCanDetails.Mobile_Number__c} 
+                                        onchange={handlePhoneChange} type="number"></lightning-input><br/>
+                        <lightning-input class="slds-size_1-of-2" label="Email" value={getCanDetails.Email__c} 
+                                        onchange={handleMailChange} type="email"></lightning-input><br/>
+                        <lightning-input class="slds-size_1-of-2" label="Address" value={getCanDetails.Address__c} 
+                                        onchange={handleAddressChange}></lightning-input><br/>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item class="slds-p-around_xx-small" size=6>
+                        <lightning-input class="slds-size_1-of-2" label="Alternate Phone Number" value={getCanDetails.Alternative_Number__c} 
+                                        onchange={handleAlternatePhoneChange} type="number"></lightning-input><br/>
+                        <lightning-input class="slds-size_1-of-2" label="Age" value={getCanDetails.Age__c} 
+                                        type="number" onchange={handleAgeChange}></lightning-input><br/>
+                        <template if:true={genderValues.data}>
+                        <lightning-combobox label="Gender" value={getCanDetails.Gender__c} options={genderValues.data.values}
+                                        onchange={handleGenderChange} class="slds-size_1-of-2">
+                        </lightning-combobox><br/></template>
+                        <lightning-input class="slds-size_1-of-2" label="Location" value={getCanDetails.Location__c} 
+                                        onchange={handleLocationChange}></lightning-input><br/>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-tab>
+
+            <lightning-tab label="Skill Details" value="2" onactive={handleActive}>
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item class="slds-p-around_xx-small" size=6>
+                        <template if:true={qualificationValues.data}>
+                            <lightning-combobox label="Highest Qualification" value={getCanDetails.Highest_Qualification__c} 
+                                            options={qualificationValues.data.values} class="slds-size_1-of-2"
+                                            onchange={handleQualificationChange}>
+                        </lightning-combobox><br/></template>
+                        <template if:true={handleOtherQualificationHide}>
+                        <lightning-input label="Other Qualification" value={getCanDetails.Other_Qualification__c} 
+                                        onchange={handleOtherQualificationChange} class="slds-size_1-of-2">
+                        </lightning-input><br/></template>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item class="slds-p-around_xx-small" size=6>
+                        <lightning-combobox label="Technology" value={getCanDetails.Domain_Technology__c} 
+                                            options={technologyOptions} class="slds-size_1-of-2"
+                                            onchange={handleTechnologyChange}>
+                        </lightning-combobox><br/>
+                        <lightning-dual-listbox name="Select Options" label="Skills" source-label="Available Options" 
+                                                field-level-help="Select your preferred skill" options={skillsOptions}
+                                                selected-label="Selected Options" onchange={handleSkillChange}>
+                        </lightning-dual-listbox><br/>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-tab>
+
+            <lightning-tab label="Id Proof Details" value="3" onactive={handleActive}>
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item class="slds-p-around_xx-small" size=6>
+                        <template if:true={idProofValues.data}>
+                        <lightning-combobox class="slds-size_1-of-2" label="Id Proof" value={getCanDetails.ID_Proof__c} 
+                                        onchange={handleIdProofChange} options={idProofValues.data.values}></lightning-combobox><br/></template>
+                        <template if:true={handleIdProofNumHide}>
+                        <lightning-input class="slds-size_1-of-2" label="Id Proof Number" value={getCanDetails.ID_Number__c} 
+                                        onchange={handleIdProofNumChange}></lightning-input><br/>
+                        </template>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item class="slds-p-around_xx-small" size=6>
+                        <lightning-input class="slds-size_1-of-2" label="Passport" value={getCanDetails.Passport__c} 
+                                        type="checkbox" onchange={handlePassportChange}></lightning-input><br/>
+                        <template if:true={handlePassportNumHide}>
+                        <lightning-input label="Passport Number" value={getCanDetails.Passport_Number__c}
+                                        onchange={handlePassportNumChange} class="slds-size_1-of-2">
+                        </lightning-input><br/>
+                        </template>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-tab>
+        
+            <lightning-tab label="Previous Employment Details" value="4" onactive={handleActive}>
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item class="slds-p-around_xx-small" size=6>
+                        <lightning-input class="slds-size_1-of-2" label="Previous Employee of CIT" value={getCanDetails.Previous_Employee_of_CIT__c} 
+                                        onchange={handlePrevEmpCitChange} type="checkbox"></lightning-input><br/>
+                        <template if:true={handleEmpIdHide}>
+                        <lightning-input class="slds-size_1-of-2" label="CIT Employee Id" value={getCanDetails.Employee_ID__c} 
+                                        onchange={handleCitEmpIdChange} type="number"></lightning-input><br/>
+                        </template>
+                        <lightning-input class="slds-size_1-of-2" label="Available Start Date" value={getCanDetails.Available_Start_Date__c} 
+                                        onchange={handleStartDateChange} type="date"></lightning-input><br/>
+                        <lightning-input type="file" 
+                                        accept=".pdf"
+                                        label="Attachment" onchange={openfileUpload}> </lightning-input>
+                        <template if:true={fileData}>
+                                    <p>{fileData.filename}</p>
+                        </template>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item class="slds-p-around_xx-small" size=6>
+                        <template if:true={jobModeValues.data}>
+                        <lightning-combobox label="Job Mode" value={getCanDetails.Job_Mode_Preference__c}
+                                            onchange={handleJobModeChange} class="slds-size_1-of-2" options={jobModeValues.data.values}>
+                        </lightning-combobox><br/></template>
+                        <template if:true={empStatusValues.data}>
+                        <lightning-combobox label="Current Employment Status" value={getCanDetails.Current_Employment_Status__c}
+                                        onchange={handleEmpStatusChange} class="slds-size_1-of-2" options={empStatusValues.data.values}>
+                        </lightning-combobox><br/></template>
+                        <lightning-input class="slds-size_1-of-2" label="Experience" value={getCanDetails.Experience__c} 
+                                        onchange={handleExperienceChange} type="number" step=".1"></lightning-input><br/>
+                    </lightning-layout-item>
+                    <lightning-button label="Submit" onclick={handleSubmit} variant="success" class="slds-align_absolute-center">
+                    </lightning-button>
+                </lightning-layout>
+            </lightning-tab>
+
+        </lightning-tabset>
+        <div slot="footer">      
+            <lightning-button variant="brand" label="Previous" disabled={disablePrev} onclick={goToPrev}></lightning-button>
+            <lightning-button variant="brand" label="Next" disabled={disableNext} onclick={goToNext} class="slds-m-left_x-small"></lightning-button>
+        </div>
+    </lightning-card>
+</template>
